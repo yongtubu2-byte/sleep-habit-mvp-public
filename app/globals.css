@@ -1,0 +1,37 @@
+:root {
+  --ink: #17211c;
+  --muted: #637069;
+  --paper: #f7f8f5;
+  --white: #ffffff;
+  --forest: #1f5946;
+  --forest-dark: #163c31;
+  --sage: #dfe9e2;
+  --coral: #cb6655;
+  --gold: #c79843;
+  --line: #dfe4df;
+  --soft-blue: #e6eef2;
+  --danger: #a63f36;
+  --font-geist-sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+* { box-sizing: border-box; padding: 0; margin: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-geist-sans);
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+}
+button, input { font: inherit; letter-spacing: 0; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { color: inherit; }
+a { color: inherit; text-decoration: none; }
+::selection { background: #c9dfd2; color: #10261e; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
