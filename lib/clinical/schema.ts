@@ -1,3 +1,20 @@
+export type SleepDomainId =
+  | "rhythm"
+  | "onset"
+  | "maintenance"
+  | "recovery"
+  | "daytime"
+  | "body"
+  | "mind";
+
+export type SleepRiskId = "apnea" | "driving" | "depression" | "selfHarm";
+
+export type SleepHabitAssessmentSnapshot = {
+  total: number;
+  domainScores: Record<SleepDomainId, number>;
+  risks: SleepRiskId[];
+};
+
 export type SleepSnapshot = {
   bedtime?: string;
   wakeTime?: string;
@@ -37,6 +54,7 @@ export type ClinicalCheckpoint = {
   date: string;
   phase: "baseline" | "2w" | "4w" | "8w" | "12w" | "other";
   sleep?: SleepSnapshot;
+  sleepHabitAssessment?: SleepHabitAssessmentSnapshot;
   aging?: HealthyAgingSnapshot;
   treatment?: TreatmentSnapshot;
   patientReportedChange?: string;
@@ -87,7 +105,7 @@ export function validateClinicalCase(input: ClinicalCase): ValidationIssue[] {
       });
     }
 
-    const bounded = [
+    const bounded10 = [
       ["sleep.morningRecovery0to10", checkpoint.sleep?.morningRecovery0to10],
       ["sleep.daytimeSleepiness0to10", checkpoint.sleep?.daytimeSleepiness0to10],
       ["aging.pain0to10", checkpoint.aging?.pain0to10],
@@ -95,12 +113,31 @@ export function validateClinicalCase(input: ClinicalCase): ValidationIssue[] {
       ["aging.appetite0to10", checkpoint.aging?.appetite0to10],
     ] as const;
 
-    for (const [field, value] of bounded) {
+    for (const [field, value] of bounded10) {
       if (value !== undefined && (value < 0 || value > 10)) {
         issues.push({
           field: `${prefix}.${field}`,
           message: "Value must be between 0 and 10.",
         });
+      }
+    }
+
+    const assessment = checkpoint.sleepHabitAssessment;
+    if (assessment) {
+      if (assessment.total < 0 || assessment.total > 100) {
+        issues.push({
+          field: `${prefix}.sleepHabitAssessment.total`,
+          message: "Sleep habit total must be between 0 and 100.",
+        });
+      }
+
+      for (const [domain, value] of Object.entries(assessment.domainScores)) {
+        if (value < 0 || value > 100) {
+          issues.push({
+            field: `${prefix}.sleepHabitAssessment.domainScores.${domain}`,
+            message: "Sleep habit domain scores must be between 0 and 100.",
+          });
+        }
       }
     }
   }
