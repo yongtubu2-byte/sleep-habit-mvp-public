@@ -17,10 +17,66 @@ This branch is the first technical foundation for a local-first clinical workflo
 4. **Kyungokdang OS UI**
    - Sleep and healthy-aging modules can consume the same schema.
 
+## Local Mac mini runbook
+
+Install dependencies once:
+
+```bash
+npm ci
+```
+
+Start the privacy gateway:
+
+```bash
+npm run privacy:local
+```
+
+Default bind:
+
+```text
+http://127.0.0.1:8788
+```
+
+Health check:
+
+```bash
+curl http://127.0.0.1:8788/health
+```
+
+Synthetic redaction test:
+
+```bash
+curl -X POST http://127.0.0.1:8788/redact \
+  -H 'content-type: application/json' \
+  -d '{
+    "caseId":"CASE-DEMO-001",
+    "text":"김테스트 010-1234-5678 밤에 세 번 깬다.",
+    "context":{"names":["김테스트"]}
+  }'
+```
+
+The launcher refuses non-loopback host bindings.
+
+## Internal Doctor Brief demo
+
+Run locally with the synthetic demo enabled:
+
+```bash
+KYUNGOKDANG_CLINICAL_DEMO=1 npm run dev
+```
+
+Then open:
+
+```text
+http://localhost:3000/clinical-demo
+```
+
+The demo route uses committed synthetic data only and is unavailable unless the environment flag is set.
+
 ## First sprint
 
 ### Privacy Gateway
-Core: `lib/privacy/redact.mjs`
+Core: `lib/privacy/redact.mjs` and `lib/privacy/server.mjs`
 
 The deterministic layer removes direct identifiers and flags possible indirect identifiers for manual review. A local LLM may be added later for Korean named-entity detection, but no cloud endpoint should ever receive raw patient text.
 
