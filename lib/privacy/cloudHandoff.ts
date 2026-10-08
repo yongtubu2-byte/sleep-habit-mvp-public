@@ -11,6 +11,19 @@ export type CloudClinicalCheckpoint = {
     nocturiaCount?: number;
     snoringOrWitnessedApnea?: boolean;
   };
+  sleepHabitAssessment?: {
+    total: number;
+    domainScores: ClinicalCase["checkpoints"][number]["sleepHabitAssessment"] extends infer T
+      ? T extends { domainScores: infer D }
+        ? D
+        : never
+      : never;
+    risks: ClinicalCase["checkpoints"][number]["sleepHabitAssessment"] extends infer T
+      ? T extends { risks: infer R }
+        ? R
+        : never
+      : never;
+  };
   aging?: {
     fallsPast12Months?: number;
     timedUpAndGoSeconds?: number;
@@ -79,6 +92,13 @@ export function buildCloudClinicalPayload(input: ClinicalCase): CloudClinicalPay
             daytimeSleepiness0to10: checkpoint.sleep.daytimeSleepiness0to10,
             nocturiaCount: checkpoint.sleep.nocturiaCount,
             snoringOrWitnessedApnea: checkpoint.sleep.snoringOrWitnessedApnea,
+          }
+        : undefined,
+      sleepHabitAssessment: checkpoint.sleepHabitAssessment
+        ? {
+            total: checkpoint.sleepHabitAssessment.total,
+            domainScores: { ...checkpoint.sleepHabitAssessment.domainScores },
+            risks: [...checkpoint.sleepHabitAssessment.risks],
           }
         : undefined,
       aging: checkpoint.aging
