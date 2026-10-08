@@ -28,7 +28,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
 .env*
 
 # vercel
@@ -40,3 +40,14 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# clinical privacy zone - never commit raw or re-identifiable patient data
+/local-data/
+/patient-data/
+/raw-audio/
+/raw-transcripts/
+/reidentification/
+/identifier-maps/
+*.patient.json
+*.patient.csv
+*.clinical.raw.*
