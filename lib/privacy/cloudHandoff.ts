@@ -1,4 +1,7 @@
-import type { ClinicalCase } from "@/lib/clinical/schema";
+import type {
+  ClinicalCase,
+  SleepHabitAssessmentSnapshot,
+} from "@/lib/clinical/schema";
 
 export type CloudClinicalCheckpoint = {
   phase: ClinicalCase["checkpoints"][number]["phase"];
@@ -11,19 +14,10 @@ export type CloudClinicalCheckpoint = {
     nocturiaCount?: number;
     snoringOrWitnessedApnea?: boolean;
   };
-  sleepHabitAssessment?: {
-    total: number;
-    domainScores: ClinicalCase["checkpoints"][number]["sleepHabitAssessment"] extends infer T
-      ? T extends { domainScores: infer D }
-        ? D
-        : never
-      : never;
-    risks: ClinicalCase["checkpoints"][number]["sleepHabitAssessment"] extends infer T
-      ? T extends { risks: infer R }
-        ? R
-        : never
-      : never;
-  };
+  sleepHabitAssessment?: Pick<
+    SleepHabitAssessmentSnapshot,
+    "total" | "domainScores" | "risks"
+  >;
   aging?: {
     fallsPast12Months?: number;
     timedUpAndGoSeconds?: number;
