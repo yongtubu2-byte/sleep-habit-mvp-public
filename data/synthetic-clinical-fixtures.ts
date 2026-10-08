@@ -21,6 +21,19 @@ export const syntheticClinicalCase: ClinicalCase = {
         nocturiaCount: 3,
         snoringOrWitnessedApnea: false,
       },
+      sleepHabitAssessment: {
+        total: 54,
+        domainScores: {
+          rhythm: 58,
+          onset: 42,
+          maintenance: 46,
+          recovery: 50,
+          daytime: 67,
+          body: 50,
+          mind: 63,
+        },
+        risks: [],
+      },
       aging: {
         fallsPast12Months: 0,
         pain0to10: 7,
@@ -48,6 +61,19 @@ export const syntheticClinicalCase: ClinicalCase = {
         daytimeSleepiness0to10: 3,
         nocturiaCount: 1,
         snoringOrWitnessedApnea: false,
+      },
+      sleepHabitAssessment: {
+        total: 72,
+        domainScores: {
+          rhythm: 75,
+          onset: 67,
+          maintenance: 67,
+          recovery: 75,
+          daytime: 83,
+          body: 67,
+          mind: 71,
+        },
+        risks: [],
       },
       aging: {
         fallsPast12Months: 0,
