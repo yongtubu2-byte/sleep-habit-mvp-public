@@ -1,4 +1,4 @@
-import type { ClinicalCase, ClinicalCheckpoint } from "./schema";
+import type { ClinicalCase, ClinicalCheckpoint, SleepRiskId } from "./schema";
 
 type ChangeLine = {
   label: string;
@@ -26,6 +26,19 @@ function latestTwo(checkpoints: ClinicalCheckpoint[]) {
   };
 }
 
+function riskLabel(risk: SleepRiskId): string {
+  switch (risk) {
+    case "apnea":
+      return "수면호흡 관련 주의 신호";
+    case "driving":
+      return "졸음운전 관련 주의 신호";
+    case "depression":
+      return "정신건강 관련 주의 신호";
+    case "selfHarm":
+      return "즉시 확인이 필요한 안전 관련 신호";
+  }
+}
+
 export type DoctorBrief = {
   header: string;
   changes: string[];
@@ -48,6 +61,12 @@ export function buildDoctorBrief(clinicalCase: ClinicalCase): DoctorBrief {
 
   const changes = previous
     ? [
+        formatChange({
+          label: "수면 습관 총점",
+          previous: previous.sleepHabitAssessment?.total,
+          current: current.sleepHabitAssessment?.total,
+          unit: "/100",
+        }),
         formatChange({
           label: "중간각성",
           previous: previous.sleep?.awakenings,
@@ -104,6 +123,11 @@ export function buildDoctorBrief(clinicalCase: ClinicalCase): DoctorBrief {
   }
   if ((current.aging?.medicationCount ?? 0) >= 5) {
     questions.push("최근 추가·중단된 약과 복용시간 확인");
+  }
+
+  for (const risk of current.sleepHabitAssessment?.risks ?? []) {
+    const label = riskLabel(risk);
+    if (!cautions.includes(label)) cautions.push(label);
   }
 
   if (questions.length === 0) {
