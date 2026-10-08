@@ -80,7 +80,7 @@ export function validateClinicalCase(input: ClinicalCase): ValidationIssue[] {
   for (const [index, checkpoint] of input.checkpoints.entries()) {
     const prefix = `checkpoints[${index}]`;
 
-    if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(checkpoint.date)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(checkpoint.date)) {
       issues.push({
         field: `${prefix}.date`,
         message: "Date must be YYYY-MM-DD.",
